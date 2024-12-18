@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 const GalaxyScene: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);

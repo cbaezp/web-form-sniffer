@@ -1,4 +1,3 @@
-```markdown
 # Web Form Sniffer 🚨
 
 A demonstration of how websites can extract autofilled personal information from your browser without you explicitly submitting a form. This project aims to raise awareness of the privacy risks associated with using autocomplete fields on websites.
@@ -23,7 +22,7 @@ A demonstration of how websites can extract autofilled personal information from
 
 ### Prerequisites
 To run this project locally, ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v14+ recommended)
+- [Node.js](https://nodejs.org/) (v15 recommended)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
 ### Installation
@@ -84,5 +83,4 @@ Inspired by the need to educate users about online privacy risks. Special thanks
 - [Autofill_Danger](https://github.com/0dayCTF/Autofill_Danger)
 - [browser-autofill-phishing](https://github.com/anttiviljami/browser-autofill-phishing)
 
-```
 

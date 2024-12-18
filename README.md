@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+```markdown
+# Web Form Sniffer 🚨
 
-## Getting Started
+A demonstration of how websites can extract autofilled personal information from your browser without you explicitly submitting a form. This project aims to raise awareness of the privacy risks associated with using autocomplete fields on websites.
 
-First, run the development server:
+![Demo](./demo.gif)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+- **Real-Time Autofill Detection:** Automatically detects and logs autofilled fields from the browser.
+- **Formatted Data Display:** Displays all extracted personal information in a styled UI.
+- **No Submit Required:** Demonstrates how data can be extracted without a user clicking the submit button, using a visible email field as an example for the demo, while other fields remain hidden but still auto-filled.
+
+---
+
+## 🚀 Live Demo
+👉 [Live Project Link](#)
+
+---
+
+## 🛠️ Getting Started
+
+### Prerequisites
+To run this project locally, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v14+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/cbaezp/web-form-sniffer.git
+   cd web-form-sniffer
+   ```
+
+2. **Install dependencies**:
+   Using npm:
+   ```bash
+   npm install
+   ```
+   Or using yarn:
+   ```bash
+   yarn install
+   ```
+
+3. **Start the development server**:
+   Using npm:
+   ```bash
+   npm run dev
+   ```
+   Or using yarn:
+   ```bash
+   yarn dev
+   ```
+
+4. **Open the app in your browser**:
+   By default, the app runs at `http://localhost:3000`. Visit the URL in your browser to view the project.
+
+---
+
+## 🧪 Testing the Project
+1. Open the app and navigate to the form page.
+2. Use your browser's autocomplete functionality to populate the fields (email).
+3. Check how data is extracted and displayed without pressing the submit button.
+
+
+---
+
+
+## ⚠️ Disclaimer
+This project is for **educational purposes only**. It demonstrates potential risks of using autocomplete on the web. Do not use this code for malicious purposes. Always respect user privacy.
+
+---
+
+## 📜 License
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 💡 Acknowledgments
+Inspired by the need to educate users about online privacy risks. Special thanks to the open-source community for tools and resources.
+
+### Similar Projects That Inspired This
+- [Autofill_Danger](https://github.com/0dayCTF/Autofill_Danger)
+- [browser-autofill-phishing](https://github.com/anttiviljami/browser-autofill-phishing)
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
